@@ -1,0 +1,31 @@
+.App {
+  display: flex;
+  justify-content: center;
+}
+
+.letter{
+  font-size: 2rem;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.letter-div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+  width: 5rem;
+  margin: 0;
+  padding: 0;
+   border-style: solid;
+}
+
+.word{
+  display: flex;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+

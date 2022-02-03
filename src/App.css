@@ -1,6 +1,9 @@
 .App {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  flex-direction: column;
+  height: 100vh;
+  background-color: gray;
 }
 
 .letter{
@@ -10,15 +13,20 @@
   text-align: center;
 }
 
-.letter-div{
+.words-panel{
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.word > .letter-div{
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5rem;
-  width: 5rem;
+  height: 3rem;
+  width: 3rem;
   margin: 0;
   padding: 0;
-   border-style: solid;
+  border-style: solid;
 }
 
 .word{
@@ -29,3 +37,21 @@
   justify-content: center;
 }
 
+.row-one, .row-two, .row-three{
+  display: flex;
+  justify-content: center;
+}
+
+.row-three{
+  margin-bottom: 2rem;
+}
+
+.keyboard{
+  height: 4rem;
+  width: 2rem;
+  border-style: solid;
+}
+
+.enter{
+  width: fit-content;
+}

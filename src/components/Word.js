@@ -2,7 +2,6 @@ import React from 'react';
 import Letter from './Letter';
 
 const Word = ({ letters }) => {
-  console.log(letters);
   if(letters === undefined || letters === ''){
     letters = '     '
   }

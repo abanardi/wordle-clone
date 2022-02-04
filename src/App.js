@@ -11,16 +11,52 @@ function App() {
 
   useEffect(() => {
     document.addEventListener('keydown', (ele) => {
+      // console.log(words);
       if (ele.key.match(/^[A-Za-zd]{1,1}$/)) {
-        console.log(ele.key);
+        let word = words[3];
+        word += ele.key;
+        console.log(word);
+        // console.log(ele.key);
+        // if (word.length >= 6) {
+        //   console.log('Too long');
+        // }
+        // else {
+        const wordsCopy = words.map((ele) => ele);
+        wordsCopy[3] = word;
+        // console.log(wordsCopy);
+        // console.log(words);
+        console.log('Not too long');
+        // console.log(wordsCopy);
+        setWords(wordsCopy);
+        // console.log(words);
+        // }
       }
-      const wordsCopy = words;
-      wordsCopy[3] += ele.key;
-      // console.log(wordsCopy);
-      console.log(words);
-      setWords(wordsCopy);
     });
   }, [words]);
+
+  console.log(words);
+
+  // function addLetter(wordIndex, letter) {
+  //   const wordsCopy = words.map((ele) => ele);
+  //   wordsCopy[wordIndex] += letter;
+  //   setWords(wordsCopy);
+  //   // console.log(words);
+  // }
+
+  // document.addEventListener('keydown', (ele) => {
+  //   if (ele.key.match(/^[A-Za-zd]{1,1}$/)) {
+  //     console.log(ele.key);
+  //     addLetter(1, ele.key);
+  //   }
+
+  //   // const wordsCopy = words;
+  //   // wordsCopy[3] += ele.key;
+  //   // // console.log(wordsCopy);
+  //   // // console.log(words);
+  //   // setWords(wordsCopy);
+  // });
+
+  // console.log(words);
 
   return (
     <div className="App">

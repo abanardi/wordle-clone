@@ -1,35 +1,37 @@
+/** @format */
+
 .App {
   display: flex;
   justify-content: space-around;
   flex-direction: column;
   height: 100vh;
-  background-color: gray;
 }
 
-.letter{
+.letter {
   font-size: 2rem;
   margin: 0;
   padding: 0;
   text-align: center;
 }
 
-.words-panel{
+.words-panel {
   margin-top: 2rem;
   margin-bottom: 2rem;
 }
 
-.word > .letter-div{
+.word > .letter-div {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 3rem;
-  width: 3rem;
+  height: 5rem;
+  width: 5rem;
   margin: 0;
   padding: 0;
   border-style: solid;
+  margin: 0.3rem 0.3rem 0.3rem 0.3rem;
 }
 
-.word{
+.word {
   display: flex;
   margin: 0;
   padding: 0;
@@ -37,21 +39,36 @@
   justify-content: center;
 }
 
-.row-one, .row-two, .row-three{
+.row-one,
+.row-two,
+.row-three {
   display: flex;
   justify-content: center;
 }
 
-.row-three{
+.row-three {
   margin-bottom: 2rem;
 }
 
-.keyboard{
+.keyboard {
   height: 4rem;
   width: 2rem;
   border-style: solid;
+  margin: 0.1rem 0.1rem 0.1rem 0.1rem;
 }
 
-.enter{
+.enter {
   width: fit-content;
+}
+
+.used{
+  background-color: gray;
+}
+
+.in-word{
+  background-color: yellow;
+}
+
+.in-place{
+  background-color: green;
 }

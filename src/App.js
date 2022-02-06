@@ -8,68 +8,71 @@ import Word from './components/Word';
 function App() {
   const [words, setWords] = useState(['', '', '', '', '', '']);
   const [wordNumber, setWordNumber] = useState(0);
+  const one = 'qwertyuiop';
+  const two = 'asdfghjkl';
+  const three = 'zxcvbnm';
+  const letters = (one + two + three)
+    .split('')
+    .map((letter) => ({
+      letter: letter,
+      used: false,
+      inWord: false,
+      inPlace: false,
+    }));
+  console.log(letters);
 
   useEffect(() => {
-    document.addEventListener('keydown', (ele) => {
-      // console.log(words);
-      if (ele.key.match(/^[A-Za-zd]{1,1}$/)) {
-        let word = words[3];
-        word += ele.key;
-        console.log(word);
-        // console.log(ele.key);
-        // if (word.length >= 6) {
-        //   console.log('Too long');
-        // }
-        // else {
-        const wordsCopy = words.map((ele) => ele);
-        wordsCopy[3] = word;
-        // console.log(wordsCopy);
-        // console.log(words);
-        console.log('Not too long');
-        // console.log(wordsCopy);
-        setWords(wordsCopy);
-        // console.log(words);
-        // }
+    window.addEventListener('keydown', addWord);
+    return () => {
+      window.removeEventListener('keydown', addWord);
+    };
+  });
+
+  const addWord = (e) => {
+    const letter = e.key;
+    const wordsCopy = words.map((ele) => ele);
+    let word = words[wordNumber];
+
+    // console.log(letter);
+
+    if (letter === 'Enter') {
+      // console.log('Enter hit');
+      if (wordNumber >= 6) {
+        return;
+      } else if (word.length < 5) {
+        // console.log('Not long enough');
+      } else {
+        setWordNumber(wordNumber + 1);
       }
-    });
-  }, [words]);
+    } else if (letter === 'Backspace') {
+      // console.log('Delete');
+      let deleted = word.slice(0, word.length - 1);
+      wordsCopy[wordNumber] = deleted;
+      setWords(wordsCopy);
+    } else if (wordNumber >= 6) {
+      // console.log('Too many words');
+    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
+      word += letter.toUpperCase();
+      if (word.length >= 6) {
+        // console.log('Hit enter');
+        return;
+      }
+      wordsCopy[wordNumber] = word;
+      setWords(wordsCopy);
+    } else {
+      // console.log('Does not work!');
+    }
+  };
 
-  console.log(words);
-
-  // function addLetter(wordIndex, letter) {
-  //   const wordsCopy = words.map((ele) => ele);
-  //   wordsCopy[wordIndex] += letter;
-  //   setWords(wordsCopy);
-  //   // console.log(words);
-  // }
-
-  // document.addEventListener('keydown', (ele) => {
-  //   if (ele.key.match(/^[A-Za-zd]{1,1}$/)) {
-  //     console.log(ele.key);
-  //     addLetter(1, ele.key);
-  //   }
-
-  //   // const wordsCopy = words;
-  //   // wordsCopy[3] += ele.key;
-  //   // // console.log(wordsCopy);
-  //   // // console.log(words);
-  //   // setWords(wordsCopy);
-  // });
-
-  // console.log(words);
+  let i = 0;
 
   return (
     <div className="App">
       <div className="words-panel">
-        {words.map((ele) => (
-          <Word letters={ele} />
-        ))}
-        {/* <Word letters='PLANE'/>
-      <Word />
-      <Word />
-      <Word />
-      <Word />
-      <Word /> */}
+        {words.map((ele) => {
+          i += 1;
+          return <Word key={'word' + i} letters={ele} />;
+        })}
       </div>
       <Keyboard />
     </div>

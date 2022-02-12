@@ -8,20 +8,21 @@ import Word from './components/Word';
 function App() {
   const [words, setWords] = useState(['', '', '', '', '', '']);
   const [wordNumber, setWordNumber] = useState(0);
+
+  // Alphabet used for keyboard
   const one = 'qwertyuiop';
   const two = 'asdfghjkl';
   const three = 'zxcvbnm';
-  const letters = (one + two + three)
-    .split('')
-    .map((letter) => ({
-      letter: letter,
-      used: false,
-      inWord: false,
-      inPlace: false,
-    }));
-  console.log(letters);
+  const letters = (one + two + three).split('').map((letter) => ({
+    letter: letter,
+    used: false,
+    inWord: false,
+    inPlace: false,
+  }));
+  // console.log(letters);
 
   useEffect(() => {
+    // Allows program to detect keyboard input for letters (only alphabetical characters)
     window.addEventListener('keydown', addWord);
     return () => {
       window.removeEventListener('keydown', addWord);
@@ -29,34 +30,31 @@ function App() {
   });
 
   const addWord = (e) => {
+    // Adds a letter to the current word we're working on
     const letter = e.key;
-    const wordsCopy = words.map((ele) => ele);
+    const wordsCopy = words.map((ele) => ele); // Dummy array that we're going to modify
     let word = words[wordNumber];
 
-    // console.log(letter);
-
-    if (letter === 'Enter') {
-      // console.log('Enter hit');
+    if (letter === 'Enter') { // What happens when you hit enter key to submit word
       if (wordNumber >= 6) {
         return;
       } else if (word.length < 5) {
-        // console.log('Not long enough');
       } else {
         setWordNumber(wordNumber + 1);
       }
     } else if (letter === 'Backspace') {
-      // console.log('Delete');
       let deleted = word.slice(0, word.length - 1);
       wordsCopy[wordNumber] = deleted;
       setWords(wordsCopy);
     } else if (wordNumber >= 6) {
-      // console.log('Too many words');
-    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
+    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) { // Matches an alphabetical character
       word += letter.toUpperCase();
       if (word.length >= 6) {
-        // console.log('Hit enter');
         return;
       }
+
+      // Sets word equal to the previous word + a letter
+      // Updates list to dummy list
       wordsCopy[wordNumber] = word;
       setWords(wordsCopy);
     } else {
@@ -74,7 +72,7 @@ function App() {
           return <Word key={'word' + i} letters={ele} />;
         })}
       </div>
-      <Keyboard />
+      <Keyboard letters={letters}/>
     </div>
   );
 }

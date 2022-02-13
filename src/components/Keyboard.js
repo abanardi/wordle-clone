@@ -4,59 +4,81 @@ import React from 'react';
 import Letter from './Letter';
 
 const Keyboard = ({ letters }) => {
-  const one = 'qwertyuiop';
-  const two = 'asdfghjkl';
-  const three = 'zxcvbnm';
-  console.log(letters.slice(0, 10));
   let i = 0;
 
   return (
     <div>
       <div className="row-one">
         {letters.slice(0, 10).map((ele) => {
+          let modifiers = '';
+         
+          // Applies the style elements
+          if (ele.used) {
+            modifiers += 'used ';
+          }
+          if (ele.inWord) {
+            modifiers += 'in-word ';
+          }
+          if (ele.inPlace) {
+            modifiers += 'in-place';
+          }
           i += 1;
           return (
             <Letter
               key={'keyboard ' + i}
               innerText={ele.letter}
-              classModifiers="keyboard"
+              classModifiers={'keyboard ' + modifiers}
             />
           );
         })}
-        {/* {one.split('').map((ele) => {
-          i += 1;
-          return (
-            <Letter
-              key={'keyboard ' + i}
-              innerText={ele}
-              classModifiers="keyboard"
-            />
-          );
-        })} */}
       </div>
       <div className="row-two">
-        {/* {two.split('').map((ele) => {
+        {letters.slice(10, 19).map((ele) => {
+          let modifiers = '';
+
+          // Applies the style elements
+          if (ele.used) {
+            modifiers += 'used ';
+          }
+          if (ele.inWord) {
+            modifiers += 'in-word ';
+          }
+          if (ele.inPlace) {
+            modifiers += 'in-place';
+          }
           i += 1;
           return (
             <Letter
               key={'keyboard ' + i}
-              innerText={ele}
-              classModifiers="keyboard"
+              innerText={ele.letter}
+              classModifiers={'keyboard ' + modifiers}
             />
           );
-        })} */}
+        })}
       </div>
       <div className="row-three">
-        {/* {three.split('').map((ele) => {
+        {letters.slice(19, 26).map((ele) => {
+          let modifiers = '';
+          
+          // Applies the style elements
+          if (ele.used) {
+            modifiers += 'used ';
+          }
+          if (ele.inWord) {
+            modifiers += 'in-word ';
+          }
+          if (ele.inPlace) {
+            modifiers += 'in-place';
+          }
           i += 1;
           return (
             <Letter
               key={'keyboard ' + i}
-              innerText={ele}
-              classModifiers="keyboard"
+              innerText={ele.letter}
+              classModifiers={'keyboard ' + modifiers}
             />
           );
-        })} */}
+        })}
         <Letter innerText={'Enter'} classModifiers="keyboard enter" />
       </div>
     </div>

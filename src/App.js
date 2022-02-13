@@ -13,13 +13,27 @@ function App() {
   const one = 'qwertyuiop';
   const two = 'asdfghjkl';
   const three = 'zxcvbnm';
-  const letters = (one + two + three).split('').map((letter) => ({
+
+  const [letters, setLetters] = useState((one + two + three).split('').map((letter) => ({
     letter: letter,
     used: false,
     inWord: false,
     inPlace: false,
-  }));
-  // console.log(letters);
+  })));
+
+  const letterMap = new Map(); // Used to find index of letter when changing
+  const allLetters = (one + two + three).split('');
+  for (let i = 0; i < allLetters.length; i++) {
+    letterMap.set(allLetters[i], i);
+  }
+
+  const changeLetterCondition = (letter) => {
+    // Changes the color of the letter on keyboard depending on its status
+    const lettersdummy = letters;
+    lettersdummy[letterMap.get(letter)].used = true;
+    setLetters(lettersdummy);
+  }
+
 
   useEffect(() => {
     // Allows program to detect keyboard input for letters (only alphabetical characters)
@@ -35,11 +49,13 @@ function App() {
     const wordsCopy = words.map((ele) => ele); // Dummy array that we're going to modify
     let word = words[wordNumber];
 
-    if (letter === 'Enter') { // What happens when you hit enter key to submit word
+    if (letter === 'Enter') {
+      // What happens when you hit enter key to submit word
       if (wordNumber >= 6) {
         return;
       } else if (word.length < 5) {
-      } else {
+      } else {// Updates word that you're on and also highlights the letter on the keyboard
+        changeLetterCondition('y');
         setWordNumber(wordNumber + 1);
       }
     } else if (letter === 'Backspace') {
@@ -47,7 +63,8 @@ function App() {
       wordsCopy[wordNumber] = deleted;
       setWords(wordsCopy);
     } else if (wordNumber >= 6) {
-    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) { // Matches an alphabetical character
+    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
+      // Matches an alphabetical character
       word += letter.toUpperCase();
       if (word.length >= 6) {
         return;
@@ -72,7 +89,7 @@ function App() {
           return <Word key={'word' + i} letters={ele} />;
         })}
       </div>
-      <Keyboard letters={letters}/>
+      <Keyboard letters={letters} />
     </div>
   );
 }

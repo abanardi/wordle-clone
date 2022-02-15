@@ -14,12 +14,45 @@ function App() {
   const two = 'asdfghjkl';
   const three = 'zxcvbnm';
 
-  const [letters, setLetters] = useState((one + two + three).split('').map((letter) => ({
-    letter: letter,
-    used: false,
+  const [letters, setLetters] = useState(
+    (one + two + three).split('').map((letter) => ({
+      letter: letter,
+      used: false,
+      inWord: false,
+      inPlace: false,
+    }))
+  );
+
+  let emptyWordList = [];
+
+  for (let i = 0; i < 5; i++) {
+    emptyWordList.push(' ');
+  }
+  console.log(emptyWordList);
+
+  let emptyWordListObj = emptyWordList.map((ele) => ({
+    letter: ele,
+    submitted: false,
     inWord: false,
     inPlace: false,
-  })));
+  }));
+
+  console.log(emptyWordListObj);
+  let emptyWords = [];
+
+  for (let i = 0; i < 5; i++) {
+    emptyWords.push(emptyWordListObj);
+  }
+  console.log(emptyWords);
+
+  const [wordLetters, setWordLetters] = useState([]);
+
+  const wordLetter = {
+    letter: ' ',
+    submitted: false,
+    inWord: false,
+    inPlace: false,
+  };
 
   const letterMap = new Map(); // Used to find index of letter when changing
   const allLetters = (one + two + three).split('');
@@ -32,8 +65,7 @@ function App() {
     const lettersdummy = letters;
     lettersdummy[letterMap.get(letter)].used = true;
     setLetters(lettersdummy);
-  }
-
+  };
 
   useEffect(() => {
     // Allows program to detect keyboard input for letters (only alphabetical characters)
@@ -54,7 +86,8 @@ function App() {
       if (wordNumber >= 6) {
         return;
       } else if (word.length < 5) {
-      } else {// Updates word that you're on and also highlights the letter on the keyboard
+      } else {
+        // Updates word that you're on and also highlights the letter on the keyboard
         changeLetterCondition('y');
         setWordNumber(wordNumber + 1);
       }
@@ -86,7 +119,7 @@ function App() {
       <div className="words-panel">
         {words.map((ele) => {
           i += 1;
-          return <Word key={'word' + i} letters={ele} />;
+          return <Word key={'word' + i} letters={ele} displayWord={false} />;
         })}
       </div>
       <Keyboard letters={letters} />

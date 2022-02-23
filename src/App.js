@@ -9,15 +9,13 @@ function App() {
   const [words, setWords] = useState(['', '', '', '', '', '']);
   const [wordNumber, setWordNumber] = useState(0);
   const [correctWord, setCorrectWord] = useState('learn');
-  let letterIndex = 0;
+  const [letterIndex, setLetterIndex] = useState(0);
 
   // Alphabet used for keyboard
   const one = 'qwertyuiop';
   const two = 'asdfghjkl';
   const three = 'zxcvbnm';
 
-  console.log(words);
-  
   const [letters, setLetters] = useState(
     (one + two + three).split('').map((letter) => ({
       letter: letter,
@@ -43,7 +41,7 @@ function App() {
 
   let emptyWords = [];
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     emptyWords.push(emptyWordListObj.map((ele)=>ele));
   }
   // console.log(emptyWords);
@@ -105,34 +103,60 @@ function App() {
     - set the letter of the right address to an empty string
     */
     
-    const wordLettersCopy = wordLetters.map((ele)=>ele);
+    const wordLettersCopy = JSON.parse(JSON.stringify(wordLetters));
     
     if(letter === 'Enter'){
       if(wordNumber >= 6){
+        console.log('Too many words');
         return;
       }
-      else if(letterIndex >= 4){
-        changeLetterCondition('a');
+      else if(letterIndex >= 5){
+        console.log('Moved to next word');
+        setWordNumber(wordNumber+1);
+        setLetterIndex(0);
       }
     }
     else if(letter === 'Backspace'){
-      if(letterIndex === 1){
+      if(letterIndex === 0){
         return;
       }
+      // console.log('Delete Letter Index', letterIndex-1);
 
-      wordLettersCopy[0][1] = {
-        letter: 'D',
-        submitted: false,
-        inWord: false,
-        inPlace: false,
-      };
-      console.log(wordLettersCopy);
-      console.log(wordLetters);
+      wordLettersCopy[wordNumber][letterIndex-1].letter = ' ';
+
+      if(letterIndex > 0){
+        setLetterIndex(letterIndex-1);
+      }
+      // console.log(wordLettersCopy);
+      // console.log(wordLetters);
+      setWordLetters(wordLettersCopy);
+      // console.log(wordLetters);
+
+    }
+    else if(letter.match(/^[A-Za-zd]{1,1}$/)){
+      // console.log("Letter Index:",letterIndex);
+      if(wordNumber >= 6){
+        console.log('Error');
+        return;
+      }
+      if(letterIndex >= 5){
+        // console.log('Too long!');
+        // console.log(wordLetters);
+        return;
+      }
+      // console.log('Letter Index initial', letterIndex);
+      wordLettersCopy[wordNumber][letterIndex].letter = letter;
+      setLetterIndex(letterIndex+1);
+      // console.log('Letter Index', letterIndex);
+      // console.log('Trigger');
+      // console.log(wordLettersCopy);
+      // console.log('Letter Index:',letterIndex);
+      setWordLetters(wordLettersCopy);
 
     }
 
 
-    // if (letter === 'Enter') {
+    //   if (letter === 'Enter') {
     //   // What happens when you hit enter key to submit word
     //   if (wordNumber >= 6) {
     //     return;

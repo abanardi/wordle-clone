@@ -8,12 +8,16 @@ import Word from './components/Word';
 function App() {
   const [words, setWords] = useState(['', '', '', '', '', '']);
   const [wordNumber, setWordNumber] = useState(0);
+  const [correctWord, setCorrectWord] = useState('learn');
+  let letterIndex = 0;
 
   // Alphabet used for keyboard
   const one = 'qwertyuiop';
   const two = 'asdfghjkl';
   const three = 'zxcvbnm';
 
+  console.log(words);
+  
   const [letters, setLetters] = useState(
     (one + two + three).split('').map((letter) => ({
       letter: letter,
@@ -28,7 +32,7 @@ function App() {
   for (let i = 0; i < 5; i++) {
     emptyWordList.push(' ');
   }
-  console.log(emptyWordList);
+
 
   let emptyWordListObj = emptyWordList.map((ele) => ({
     letter: ele,
@@ -37,15 +41,17 @@ function App() {
     inPlace: false,
   }));
 
-  console.log(emptyWordListObj);
   let emptyWords = [];
 
   for (let i = 0; i < 5; i++) {
-    emptyWords.push(emptyWordListObj);
+    emptyWords.push(emptyWordListObj.map((ele)=>ele));
   }
-  console.log(emptyWords);
+  // console.log(emptyWords);
+  // console.log(emptyWords[0][0]);
 
-  const [wordLetters, setWordLetters] = useState([]);
+  const [wordLetters, setWordLetters] = useState(emptyWords);
+
+  console.log(wordLetters);
 
   const wordLetter = {
     letter: ' ',
@@ -78,40 +84,93 @@ function App() {
   const addWord = (e) => {
     // Adds a letter to the current word we're working on
     const letter = e.key;
-    const wordsCopy = words.map((ele) => ele); // Dummy array that we're going to modify
-    let word = words[wordNumber];
 
-    if (letter === 'Enter') {
-      // What happens when you hit enter key to submit word
-      if (wordNumber >= 6) {
-        return;
-      } else if (word.length < 5) {
-      } else {
-        // Updates word that you're on and also highlights the letter on the keyboard
-        changeLetterCondition('y');
-        setWordNumber(wordNumber + 1);
-      }
-    } else if (letter === 'Backspace') {
-      let deleted = word.slice(0, word.length - 1);
-      wordsCopy[wordNumber] = deleted;
-      setWords(wordsCopy);
-    } else if (wordNumber >= 6) {
-    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
-      // Matches an alphabetical character
-      word += letter.toUpperCase();
-      if (word.length >= 6) {
-        return;
-      }
 
-      // Sets word equal to the previous word + a letter
-      // Updates list to dummy list
-      wordsCopy[wordNumber] = word;
-      setWords(wordsCopy);
-    } else {
-      // console.log('Does not work!');
+    // const wordsCopy = words.map((ele) => ele); // Dummy array that we're going to modify
+    // let word = words[wordNumber];
+
+
+    /*
+    If Enter key is hit when wordNumber is equal to 6, it does snothing
+    If letterIndex is equal to 4 (meaning the word isn't complete yet), then keep passing on
+
+    If it's any letter:
+    - change the letter of the wordIndex and letterIndex
+    - if the letterIndex is greater than 4, do nothing
+    - increment the letterIndex
+
+    If it's a backspace:
+    - decrease the letterIndex
+    - if the letterIndex is going to be less than 0, do nothing
+    - set the letter of the right address to an empty string
+    */
+    
+    const wordLettersCopy = wordLetters.map((ele)=>ele);
+    
+    if(letter === 'Enter'){
+      if(wordNumber >= 6){
+        return;
+      }
+      else if(letterIndex >= 4){
+        changeLetterCondition('a');
+      }
     }
+    else if(letter === 'Backspace'){
+      if(letterIndex === 1){
+        return;
+      }
+
+      wordLettersCopy[0][1] = {
+        letter: 'D',
+        submitted: false,
+        inWord: false,
+        inPlace: false,
+      };
+      console.log(wordLettersCopy);
+      console.log(wordLetters);
+
+    }
+
+
+    // if (letter === 'Enter') {
+    //   // What happens when you hit enter key to submit word
+    //   if (wordNumber >= 6) {
+    //     return;
+    //   } else if (word.length < 5) {
+    //   } else {
+    //     // Updates word that you're on and also highlights the letter on the keyboard
+    //     changeLetterCondition('y');
+    //     setWordNumber(wordNumber + 1);
+    //   }
+    // } else if (letter === 'Backspace') {
+    //   let deleted = word.slice(0, word.length - 1);
+    //   wordsCopy[wordNumber] = deleted;
+    //   setWords(wordsCopy);
+    // } else if (wordNumber >= 6) {
+    // } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
+    //   // Matches an alphabetical character
+    //   word += letter.toUpperCase();
+    //   console.log(word);
+    //   if (word.length >= 6 ) {
+    //     console.log('Trigger');
+    //     return;
+    //   }
+
+    //   // Sets word equal to the previous word + a letter
+    //   // Updates list to dummy list
+    //   wordsCopy[wordNumber] = word;
+    //   setWords(wordsCopy);
+    // } else {
+    //   // console.log('Does not work!');
+    // }
   };
 
+
+
+
+
+
+  
   let i = 0;
 
   return (

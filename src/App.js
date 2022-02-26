@@ -6,9 +6,8 @@ import Keyboard from './components/Keyboard';
 import Word from './components/Word';
 
 function App() {
-  const [words, setWords] = useState(['', '', '', '', '', '']);
   const [wordNumber, setWordNumber] = useState(0);
-  const [correctWord, setCorrectWord] = useState('learn');
+  const [correctWord, setCorrectWord] = useState('hills');
   const [letterIndex, setLetterIndex] = useState(0);
 
   // Alphabet used for keyboard
@@ -31,7 +30,6 @@ function App() {
     emptyWordList.push(' ');
   }
 
-
   let emptyWordListObj = emptyWordList.map((ele) => ({
     letter: ele,
     submitted: false,
@@ -42,21 +40,10 @@ function App() {
   let emptyWords = [];
 
   for (let i = 0; i < 6; i++) {
-    emptyWords.push(emptyWordListObj.map((ele)=>ele));
+    emptyWords.push(emptyWordListObj.map((ele) => ele));
   }
-  // console.log(emptyWords);
-  // console.log(emptyWords[0][0]);
 
   const [wordLetters, setWordLetters] = useState(emptyWords);
-
-  // console.log(wordLetters);
-
-  const wordLetter = {
-    letter: ' ',
-    submitted: false,
-    inWord: false,
-    inPlace: false,
-  };
 
   const letterMap = new Map(); // Used to find index of letter when changing
   const allLetters = (one + two + three).split('');
@@ -64,10 +51,27 @@ function App() {
     letterMap.set(allLetters[i], i);
   }
 
-  const changeLetterCondition = (letter) => {
-    // Changes the color of the letter on keyboard depending on its status
+  const changeLetterCondition = (letterObj, index) => {
+    // Changes the color of the letter on keyboard and word depending on its status
+
     const lettersdummy = letters;
+    const letter = letterObj.letter.toLowerCase();
+
+    // Always sets the letter to used or submitted
     lettersdummy[letterMap.get(letter)].used = true;
+    letterObj.submitted = true;
+
+    // If the letter is in the word
+    if (correctWord.split('').includes(letter)) {
+      lettersdummy[letterMap.get(letter)].inWord = true;
+      letterObj.inWord = true;
+    }
+
+    // If the letter is in the word AND at the same location/index
+    if (letter === correctWord.split('')[index]) {
+      lettersdummy[letterMap.get(letter)].inPlace = true;
+      letterObj.inPlace = true;
+    }
     setLetters(lettersdummy);
   };
 
@@ -83,85 +87,44 @@ function App() {
     // Adds a letter to the current word we're working on
     const letter = e.key;
 
-
-    // const wordsCopy = words.map((ele) => ele); // Dummy array that we're going to modify
-    // let word = words[wordNumber];
-
-
-    /*
-    If Enter key is hit when wordNumber is equal to 6, it does snothing
-    If letterIndex is equal to 4 (meaning the word isn't complete yet), then keep passing on
-
-    If it's any letter:
-    - change the letter of the wordIndex and letterIndex
-    - if the letterIndex is greater than 4, do nothing
-    - increment the letterIndex
-
-    If it's a backspace:
-    - decrease the letterIndex
-    - if the letterIndex is going to be less than 0, do nothing
-    - set the letter of the right address to an empty string
-    */
-    
     const wordLettersCopy = JSON.parse(JSON.stringify(wordLetters));
-    
-    if(letter === 'Enter'){
-      if(wordNumber >= 6){
-        console.log('Too many words');
-        return;
-      }
-      else if(letterIndex >= 5){
-        console.log('Moved to next word');
 
-        for(let i=0; i<5; i++){
-          console.log(wordLetters[wordNumber][i].letter);
-          changeLetterCondition(wordLetters[wordNumber][i].letter.toLowerCase());
+    if (letter === 'Enter') {
+      if (wordNumber >= 6) {
+        // Too many words
+        return;
+      } else if (letterIndex >= 5) {
+        // Moves to next word if all letters full
+        for (let i = 0; i < 5; i++) {
+          changeLetterCondition(wordLetters[wordNumber][i], i);
         }
-        setWordNumber(wordNumber+1);
+        setWordNumber(wordNumber + 1);
         setLetterIndex(0);
       }
-    }
-    else if(letter === 'Backspace'){
-      if(letterIndex === 0){
+    } else if (letter === 'Backspace') {
+      if (letterIndex === 0) {
         return;
       }
-      // console.log('Delete Letter Index', letterIndex-1);
 
-      wordLettersCopy[wordNumber][letterIndex-1].letter = ' ';
+      wordLettersCopy[wordNumber][letterIndex - 1].letter = ' ';
 
-      if(letterIndex > 0){
-        setLetterIndex(letterIndex-1);
+      if (letterIndex > 0) {
+        setLetterIndex(letterIndex - 1);
       }
-      // console.log(wordLettersCopy);
-      // console.log(wordLetters);
       setWordLetters(wordLettersCopy);
-      // console.log(wordLetters);
-
-    }
-    else if(letter.match(/^[A-Za-zd]{1,1}$/)){
-      // console.log("Letter Index:",letterIndex);
-      if(wordNumber >= 6){
-        console.log('Error');
+    } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
+      // Clicking regular letter
+      if (wordNumber >= 6) {
         return;
       }
-      if(letterIndex >= 5){
-        // console.log('Too long!');
-        // console.log(wordLetters);
+      if (letterIndex >= 5) {
         return;
       }
-      // console.log('Letter Index initial', letterIndex);
       wordLettersCopy[wordNumber][letterIndex].letter = letter.toUpperCase();
-      setLetterIndex(letterIndex+1);
-      // console.log('Letter Index', letterIndex);
-      // console.log('Trigger');
-      // console.log(wordLettersCopy);
-      // console.log('Letter Index:',letterIndex);
+      setLetterIndex(letterIndex + 1);
       setWordLetters(wordLettersCopy);
-
     }
-
   };
-
 
   let i = 0;
 
@@ -170,9 +133,13 @@ function App() {
       <div className="words-panel">
         {wordLetters.map((ele) => {
           i += 1;
-          // console.log('i',i);
-          // console.log('wordNumber',wordNumber);
-          return <Word key={'word' + i} letters={ele} displayWord = {i-1 < wordNumber ? true : false} />;
+          return (
+            <Word
+              key={'word' + i}
+              letters={ele}
+              displayWord={i - 1 < wordNumber ? true : false}
+            />
+          );
         })}
       </div>
       <Keyboard letters={letters} />

@@ -49,7 +49,7 @@ function App() {
 
   const [wordLetters, setWordLetters] = useState(emptyWords);
 
-  console.log(wordLetters);
+  // console.log(wordLetters);
 
   const wordLetter = {
     letter: ' ',
@@ -112,6 +112,11 @@ function App() {
       }
       else if(letterIndex >= 5){
         console.log('Moved to next word');
+
+        for(let i=0; i<5; i++){
+          console.log(wordLetters[wordNumber][i].letter);
+          changeLetterCondition(wordLetters[wordNumber][i].letter.toLowerCase());
+        }
         setWordNumber(wordNumber+1);
         setLetterIndex(0);
       }
@@ -145,7 +150,7 @@ function App() {
         return;
       }
       // console.log('Letter Index initial', letterIndex);
-      wordLettersCopy[wordNumber][letterIndex].letter = letter;
+      wordLettersCopy[wordNumber][letterIndex].letter = letter.toUpperCase();
       setLetterIndex(letterIndex+1);
       // console.log('Letter Index', letterIndex);
       // console.log('Trigger');
@@ -155,54 +160,19 @@ function App() {
 
     }
 
-
-    //   if (letter === 'Enter') {
-    //   // What happens when you hit enter key to submit word
-    //   if (wordNumber >= 6) {
-    //     return;
-    //   } else if (word.length < 5) {
-    //   } else {
-    //     // Updates word that you're on and also highlights the letter on the keyboard
-    //     changeLetterCondition('y');
-    //     setWordNumber(wordNumber + 1);
-    //   }
-    // } else if (letter === 'Backspace') {
-    //   let deleted = word.slice(0, word.length - 1);
-    //   wordsCopy[wordNumber] = deleted;
-    //   setWords(wordsCopy);
-    // } else if (wordNumber >= 6) {
-    // } else if (letter.match(/^[A-Za-zd]{1,1}$/)) {
-    //   // Matches an alphabetical character
-    //   word += letter.toUpperCase();
-    //   console.log(word);
-    //   if (word.length >= 6 ) {
-    //     console.log('Trigger');
-    //     return;
-    //   }
-
-    //   // Sets word equal to the previous word + a letter
-    //   // Updates list to dummy list
-    //   wordsCopy[wordNumber] = word;
-    //   setWords(wordsCopy);
-    // } else {
-    //   // console.log('Does not work!');
-    // }
   };
 
 
-
-
-
-
-  
   let i = 0;
 
   return (
     <div className="App">
       <div className="words-panel">
-        {words.map((ele) => {
+        {wordLetters.map((ele) => {
           i += 1;
-          return <Word key={'word' + i} letters={ele} displayWord={false} />;
+          // console.log('i',i);
+          // console.log('wordNumber',wordNumber);
+          return <Word key={'word' + i} letters={ele} displayWord = {i-1 < wordNumber ? true : false} />;
         })}
       </div>
       <Keyboard letters={letters} />

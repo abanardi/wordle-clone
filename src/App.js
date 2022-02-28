@@ -10,6 +10,22 @@ function App() {
   const [correctWord, setCorrectWord] = useState('hills');
   const [letterIndex, setLetterIndex] = useState(0);
 
+  const correctWordMap = new Map();
+
+  for(let i = 0; i<correctWord.length; i++){
+    console.log(correctWord[i]);
+    if(correctWordMap.has(correctWord[i])){
+      console.log('Hit');
+      correctWordMap.set(correctWord[i], correctWordMap.get(correctWord[i]) + 1);
+    }
+    else{
+      correctWordMap.set(correctWord[i], 1);
+    }
+    
+  }
+
+  console.log(correctWordMap);
+
   // Alphabet used for keyboard
   const one = 'qwertyuiop';
   const two = 'asdfghjkl';
@@ -63,8 +79,17 @@ function App() {
 
     // If the letter is in the word
     if (correctWord.split('').includes(letter)) {
+      if(correctWordMap.get(letter) === 0){
+        letterObj.inWord = false;
+      }
+      else if(correctWordMap.get(letter) === 1){
+        if()
+
+      }
+    else{
       lettersdummy[letterMap.get(letter)].inWord = true;
       letterObj.inWord = true;
+    }
     }
 
     // If the letter is in the word AND at the same location/index

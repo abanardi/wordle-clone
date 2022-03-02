@@ -12,19 +12,20 @@ function App() {
 
   const correctWordMap = new Map();
 
-  for(let i = 0; i<correctWord.length; i++){
-    console.log(correctWord[i]);
-    if(correctWordMap.has(correctWord[i])){
-      console.log('Hit');
-      correctWordMap.set(correctWord[i], correctWordMap.get(correctWord[i]) + 1);
-    }
-    else{
+  for (let i = 0; i < correctWord.length; i++) {
+    // console.log(correctWord[i]);
+    if (correctWordMap.has(correctWord[i])) {
+      // console.log('Hit');
+      correctWordMap.set(
+        correctWord[i],
+        correctWordMap.get(correctWord[i]) + 1
+      );
+    } else {
       correctWordMap.set(correctWord[i], 1);
     }
-    
   }
 
-  console.log(correctWordMap);
+  // console.log(correctWordMap);
 
   // Alphabet used for keyboard
   const one = 'qwertyuiop';
@@ -60,6 +61,7 @@ function App() {
   }
 
   const [wordLetters, setWordLetters] = useState(emptyWords);
+  // console.table(wordLetters[wordNumber]);
 
   const letterMap = new Map(); // Used to find index of letter when changing
   const allLetters = (one + two + three).split('');
@@ -67,35 +69,58 @@ function App() {
     letterMap.set(allLetters[i], i);
   }
 
-  const changeLetterCondition = (letterObj, index) => {
+  const changeLetterCondition = (wordLetters, index) => {
     // Changes the color of the letter on keyboard and word depending on its status
 
     const lettersdummy = letters;
-    const letter = letterObj.letter.toLowerCase();
+    const letterObj = wordLetters[wordNumber][index];
+    const letter = wordLetters[wordNumber][index].letter.toLowerCase();
 
     // Always sets the letter to used or submitted
     lettersdummy[letterMap.get(letter)].used = true;
     letterObj.submitted = true;
-
+    let numberOfLetters = correctWordMap.get(letter);
+    console.log('Letter:', letter);
     // If the letter is in the word
     if (correctWord.split('').includes(letter)) {
-      if(correctWordMap.get(letter) === 0){
+      if (correctWordMap.get(letter) === 0) {
         letterObj.inWord = false;
+      } else if (correctWordMap.get(letter) === 1) {
+        // console.log('Hit');
+        const remaining = wordLetters[wordNumber].slice(
+          index + 1,
+          wordLetters[wordNumber].length
+        );
+        console.log(remaining);
+        const indexLetter = remaining.indexOf(letter.toUpperCase());
+        console.log('Index Letter:', indexLetter);
+        console.log(
+          remaining.filter((ele) => ele.letter === letter.toUpperCase())
+        );
+        if (
+          remaining.filter((ele) => ele.letter === letter.toUpperCase()) > 0
+        ) {
+          if (correctWord.split('')[indexLetter] === letter) {
+            console.log('Letter later in word is in place');
+            letterObj.inWord = false;
+          }
+        } else {
+          letterObj.inWord = true;
+          correctWordMap.set(letter, numberOfLetters - 1);
+        }
+      } else {
+        lettersdummy[letterMap.get(letter)].inWord = true;
+        console.log('Passed all');
+        letterObj.inWord = true;
+        correctWordMap.set(letter, numberOfLetters - 1);
       }
-      else if(correctWordMap.get(letter) === 1){
-        if()
-
-      }
-    else{
-      lettersdummy[letterMap.get(letter)].inWord = true;
-      letterObj.inWord = true;
-    }
     }
 
     // If the letter is in the word AND at the same location/index
     if (letter === correctWord.split('')[index]) {
       lettersdummy[letterMap.get(letter)].inPlace = true;
       letterObj.inPlace = true;
+      correctWordMap.set(letter, numberOfLetters - 1);
     }
     setLetters(lettersdummy);
   };
@@ -121,7 +146,7 @@ function App() {
       } else if (letterIndex >= 5) {
         // Moves to next word if all letters full
         for (let i = 0; i < 5; i++) {
-          changeLetterCondition(wordLetters[wordNumber][i], i);
+          changeLetterCondition(wordLetters, i);
         }
         setWordNumber(wordNumber + 1);
         setLetterIndex(0);

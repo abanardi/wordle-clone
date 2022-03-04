@@ -7,7 +7,7 @@ import Word from './components/Word';
 
 function App() {
   const [wordNumber, setWordNumber] = useState(0);
-  const [correctWord, setCorrectWord] = useState('hills');
+  const [correctWord, setCorrectWord] = useState('motor');
   const [letterIndex, setLetterIndex] = useState(0);
 
   const correctWordMap = new Map();
@@ -92,19 +92,32 @@ function App() {
           wordLetters[wordNumber].length
         );
         console.log(remaining);
-        const indexLetter = remaining.indexOf(letter.toUpperCase());
-        console.log('Index Letter:', indexLetter);
-        console.log(
-          remaining.filter((ele) => ele.letter === letter.toUpperCase())
-        );
-        if (
-          remaining.filter((ele) => ele.letter === letter.toUpperCase()) > 0
-        ) {
+        const indexLetter =
+          remaining.map((ele) => ele.letter).indexOf(letter.toUpperCase()) +
+          index +
+          1;
+        // console.log('Index Letter:', indexLetter);
+        // console.log('Index', index + 1);
+
+        // console.log(
+        //   remaining.filter((ele) => ele.letter === letter.toUpperCase())
+        // );
+
+        if (indexLetter !== -1) {
+          console.log(
+            'Index Letter Split:',
+            correctWord.split('')[indexLetter]
+          );
           if (correctWord.split('')[indexLetter] === letter) {
             console.log('Letter later in word is in place');
             letterObj.inWord = false;
+          } else {
+            lettersdummy[letterMap.get(letter)].inWord = true;
+            letterObj.inWord = true;
+            correctWordMap.set(letter, numberOfLetters - 1);
           }
         } else {
+          lettersdummy[letterMap.get(letter)].inWord = true;
           letterObj.inWord = true;
           correctWordMap.set(letter, numberOfLetters - 1);
         }

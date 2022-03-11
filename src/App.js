@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Keyboard from './components/Keyboard';
 import Word from './components/Word';
+import { allWordsList } from './AllWords';
 
 function App() {
   const [wordNumber, setWordNumber] = useState(0);
-  const [correctWord, setCorrectWord] = useState('motor');
+  const [correctWord, setCorrectWord] = useState(allWordsList[Math.floor(Math.random()*allWordsList.length)]);
   const [letterIndex, setLetterIndex] = useState(0);
-
+  let correctLettersNum = 0;
+  console.log(correctWord);
   const correctWordMap = new Map();
 
   for (let i = 0; i < correctWord.length; i++) {
-    // console.log(correctWord[i]);
     if (correctWordMap.has(correctWord[i])) {
-      // console.log('Hit');
       correctWordMap.set(
         correctWord[i],
         correctWordMap.get(correctWord[i]) + 1
@@ -25,7 +25,6 @@ function App() {
     }
   }
 
-  // console.log(correctWordMap);
 
   // Alphabet used for keyboard
   const one = 'qwertyuiop';
@@ -80,36 +79,24 @@ function App() {
     lettersdummy[letterMap.get(letter)].used = true;
     letterObj.submitted = true;
     let numberOfLetters = correctWordMap.get(letter);
-    console.log('Letter:', letter);
+
     // If the letter is in the word
     if (correctWord.split('').includes(letter)) {
       if (correctWordMap.get(letter) === 0) {
         letterObj.inWord = false;
       } else if (correctWordMap.get(letter) === 1) {
-        // console.log('Hit');
+
         const remaining = wordLetters[wordNumber].slice(
           index + 1,
           wordLetters[wordNumber].length
         );
-        console.log(remaining);
         const indexLetter =
           remaining.map((ele) => ele.letter).indexOf(letter.toUpperCase()) +
           index +
           1;
-        // console.log('Index Letter:', indexLetter);
-        // console.log('Index', index + 1);
-
-        // console.log(
-        //   remaining.filter((ele) => ele.letter === letter.toUpperCase())
-        // );
 
         if (indexLetter !== -1) {
-          console.log(
-            'Index Letter Split:',
-            correctWord.split('')[indexLetter]
-          );
           if (correctWord.split('')[indexLetter] === letter) {
-            console.log('Letter later in word is in place');
             letterObj.inWord = false;
           } else {
             lettersdummy[letterMap.get(letter)].inWord = true;
@@ -123,7 +110,6 @@ function App() {
         }
       } else {
         lettersdummy[letterMap.get(letter)].inWord = true;
-        console.log('Passed all');
         letterObj.inWord = true;
         correctWordMap.set(letter, numberOfLetters - 1);
       }
@@ -134,6 +120,7 @@ function App() {
       lettersdummy[letterMap.get(letter)].inPlace = true;
       letterObj.inPlace = true;
       correctWordMap.set(letter, numberOfLetters - 1);
+      correctLettersNum += 1;
     }
     setLetters(lettersdummy);
   };
@@ -158,11 +145,19 @@ function App() {
         return;
       } else if (letterIndex >= 5) {
         // Moves to next word if all letters full
+        correctLettersNum = 0;
         for (let i = 0; i < 5; i++) {
           changeLetterCondition(wordLetters, i);
         }
+        // console.log(correctLettersNum);
         setWordNumber(wordNumber + 1);
         setLetterIndex(0);
+        if (correctLettersNum === 5) {
+          alert('You win!');
+        }
+        if(wordNumber>=5){
+          alert('You lose');
+        }
       }
     } else if (letter === 'Backspace') {
       if (letterIndex === 0) {

@@ -4,7 +4,7 @@
   display: flex;
   justify-content: space-around;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .letter {
@@ -15,16 +15,18 @@
 }
 
 .words-panel {
+  display: flex;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  flex-direction: column;
 }
 
 .word > .letter-div {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5rem;
-  width: 5rem;
+  height: 3rem;
+  width: 3rem;
   margin: 0;
   padding: 0;
   border-style: solid;
@@ -37,6 +39,8 @@
   padding: 0;
   align-items: center;
   justify-content: center;
+  height: 3rem;
+  margin-bottom: 1rem;
 }
 
 .row-one,
@@ -61,14 +65,18 @@
   width: fit-content;
 }
 
-.used{
+.used {
   background-color: gray;
 }
 
-.in-word{
-  background-color: yellow;
+.used > .letter {
+  color: white;
 }
 
-.in-place{
+.in-word {
+  background-color: rgb(196, 196, 44);
+}
+
+.in-place {
   background-color: green;
 }
